@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>リマインド登録</title>
+<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<h1>リマインド登録</h1>
+
+<form th:action="@{/reminder/new}" method="post">
+    <p>
+        <label>タイトル：</label><br>
+        <input type="text" name="title" required>
+    </p>
+
+    <p>
+        <label>説明：</label><br>
+        <textarea name="description"></textarea>
+    </p>
+
+    <p>
+        <label>日付：</label><br>
+        <input type="date" name="date" required>
+    </p>
+
+    <p>
+        <label>時刻：</label><br>
+        <input type="time" name="time">
+    </p>
+    
+	<label>通知タイミング</label><br>
+	<select name="notifyBeforeMinutes">
+	    <option value="0">予定時刻ちょうど</option>
+		<option value="1">1分前</option>
+	    <option value="5">5分前</option>
+	    <option value="10">10分前</option>
+	    <option value="30">30分前</option>
+	    <option value="60">1時間前</option>
+	</select>
+
+    <button type="submit">登録</button>
+</form>
+
+<p>
+    <a th:href="@{/calendar}">カレンダーへ戻る</a>
+</p>
+
+</body>
+</html>

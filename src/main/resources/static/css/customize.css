@@ -1,0 +1,23 @@
+/* ページ全体 */
+body {
+  font-family: sans-serif;
+  margin: 20px;
+}
+
+/* ドラッグ可能なパネル共通 */
+.panel {
+  position: absolute;          
+  width: 300px;
+  height: 200px;
+  background: #f4f4f4;
+  border: 1px solid #999;
+  cursor: move;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* カレンダーパネル個別 */
+#calendarPanel {
+  left: 50px;
+  top: 100px;
+}

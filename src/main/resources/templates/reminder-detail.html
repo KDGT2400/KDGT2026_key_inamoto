@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>予定詳細</title>
+</head>
+<body>
+
+<h1 th:text="${reminder.title}"></h1>
+
+<p>日付：<span th:text="${reminder.date}"></span></p>
+<p>時刻：<span th:text="${reminder.time}"></span></p>
+<p>内容：<span th:text="${reminder.description}"></span></p>
+
+<hr>
+
+<a th:href="@{/reminder/{id}/edit(id=${reminder.id})}">編集</a>
+
+<form th:action="@{/reminder/{id}/delete(id=${reminder.id})}"
+      method="post"
+      style="display:inline;">
+    <button type="submit">削除</button>
+</form>
+
+<br><br>
+<a th:href="@{/calendar}">カレンダーに戻る</a>
+
+</body>
+</html>

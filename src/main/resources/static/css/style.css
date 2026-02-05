@@ -1,0 +1,263 @@
+/* ===== 全体リセット ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-size: var(--font-size);
+}
+
+/* ===== ヘッダー ===== */
+.header {
+  background-color: #4f46e5;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.header p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* ===== ナビゲーション ===== */
+.main-nav {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+.main-nav .button {
+  text-decoration: none;
+  padding: 8px 16px;
+  background-color: #4f46e5;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.main-nav .button:hover {
+  background-color: #4338ca;
+}
+
+.main-nav .button.secondary {
+  background-color: #9ca3af;
+}
+
+.main-nav .button.secondary:hover {
+  background-color: #6b7280;
+}
+
+.inline {
+  display: inline;
+}
+
+/* ===== メインコンテンツ ===== */
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+/* ===== 見出し ===== */
+.container h2 {
+  margin-bottom: 12px;
+  font-size: 20px;
+  border-left: 5px solid #4f46e5;
+  padding-left: 10px;
+}
+
+/* ===== テーブル共通 ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+thead {
+  background-color: #eef2ff;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+th {
+  font-size: 14px;
+  color: #374151;
+}
+
+td {
+  font-size: 14px;
+}
+
+/* ===== リマインダー用 ===== */
+.reminder-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.reminder-actions a,
+.reminder-actions button {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.reminder-actions a {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+.reminder-actions a:hover {
+  background-color: #2563eb;
+}
+
+.reminder-actions button {
+  background-color: #ef4444;
+  color: #fff;
+}
+
+.reminder-actions button:hover {
+  background-color: #dc2626;
+}
+
+/* ===== 空データ表示 ===== */
+.empty-message {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 6px;
+  text-align: center;
+  color: #6b7280;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* 操作列を横並びにする */
+.actions-cell {
+  display: flex;
+  flex-direction: column;   /* ← 縦並び */
+  align-items: center;
+  gap: 6px;
+}
+
+.actions-label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+
+/* formがズレる原因なので調整 */
+.actions-cell form {
+  margin: 0;
+}
+
+/* ボタン共通 */
+.btn {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: #fff;
+}
+
+/* 編集 */
+.btn.edit {
+  background-color: #3b82f6;
+}
+
+.btn.edit:hover {
+  background-color: #2563eb;
+}
+
+/* 削除 */
+.btn.delete {
+  background-color: #ef4444;
+}
+
+.btn.delete:hover {
+  background-color: #dc2626;
+}
+
+/* ===== 過去のリマインダー ===== */
+.past-reminder {
+  background-color: #f3f4f6;   /* 薄いグレー */
+  color: #9ca3af;              /* 文字もグレー */
+}
+
+/* ボタンも弱める 
+.past-reminder .btn {
+  opacity: 0.5;       
+}*/
+
+.past-reminder .btn:hover {
+  opacity: 1;
+}
+
+.month-selector {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.month-selector select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+.month-selector button {
+  background-color: #4f46e5;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 15px;
+  }
+
+  td {
+    padding: 10px;
+    position: relative;
+  }
+}
+

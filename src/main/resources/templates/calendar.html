@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>カレンダー</title>
+<link rel="stylesheet" th:href="@{/css/calendar.css}">
+</head>
+<body>
+	<!-- ログ、開発用 -->
+<p th:text="'reminders size = ' + ${reminders.size()}"></p>
+<p th:text="'reminderMap size = ' + ${reminderMap.size()}"></p>
+	
+<h1 th:text="${year} + '年 ' + ${month} + '月'"></h1>
+
+<!-- 前月・次月 -->
+<a th:href="@{/calendar(year=${month == 1 ? year - 1 : year},
+                        month=${month == 1 ? 12 : month - 1})}">
+    ◀ 前月
+</a>
+｜
+<a th:href="@{/calendar(year=${month == 12 ? year + 1 : year},
+                        month=${month == 12 ? 1 : month + 1})}">
+    次月 ▶
+</a>
+<div id="calendar">
+<table>
+<thead>
+<tr>
+    <th>日</th><th>月</th><th>火</th><th>水</th>
+    <th>木</th><th>金</th><th>土</th>
+</tr>
+</thead>
+<tbody>
+	<tr th:each="week : ${weeks}">
+	    <td th:each="day : ${week}" th:classappend="${day != null and day.equals(today)} ? 'today'">
+	        <div th:if="${day != null}">
+				<div class="date">
+				    <span class="date-link"
+				          th:data-date="${day}"
+				          th:text="${day.dayOfMonth}"
+				          onclick="openCreateModal(this)">
+				    </span>
+				</div>
+				</div>
+
+				<div th:if="${reminderMap.get(day) != null}">
+					<div th:each="r : ${reminderMap.get(day)}" class="reminder">
+				        <a href="javascript:void(0);"
+				           class="reminder-link"
+				           th:data-id="${r.id}"
+				           th:data-title="${r.title}"
+				           th:data-date="${r.date}"
+				           th:data-time="${r.time}"
+				           th:data-description="${r.description}"
+				           onclick="openEditModal(this)">
+				            <span th:text="${r.title}"></span>
+				        </a>
+				    </div>
+				</div>
+
+
+	        </div>
+	    </td>
+	</tr>
+
+</tbody>
+</table>
+</div>
+
+<p>
+    <a th:href="@{/reminder/new}">＋ リマインド追加</a>
+</p>
+
+<p>
+    <a th:href="@{/customize}">カスタマイズ</a>
+</p>
+
+
+
+<div id="create-modal" style="display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.5);">
+
+    <div style="background:#fff; width:400px; margin:100px auto; padding:20px;">
+        <h2>リマインド追加</h2>
+
+        <form th:action="@{/calendar/new}" method="post">
+			<input type="hidden"
+			           th:name="${_csrf.parameterName}"
+			           th:value="${_csrf.token}">
+					   
+            <input type="hidden" id="create-date" name="date">
+
+            <input type="text" name="title" placeholder="タイトル" required><br><br>
+            <input type="time" name="time" required><br><br>
+			
+			<label>通知タイミング</label><br>
+			<select name="notifyBeforeMinutes" id="edit-notify">
+			    <option value="0">予定時刻</option>
+				<option value="1">1分前</option>
+			    <option value="5">5分前</option>
+			    <option value="10">10分前</option>
+			    <option value="30">30分前</option>
+			    <option value="60">1時間前</option>
+			</select>
+
+
+            <button type="submit">保存</button>
+            <button type="button" onclick="closeCreateModal()">キャンセル</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- モーダル -->
+<div id="edit-modal" style="display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.5);">
+
+    <div style="background:#fff; width:400px; margin:100px auto; padding:20px;">
+        <h2>リマインド編集</h2>
+
+        <form id="edit-form" method="post">
+			<input type="hidden"
+			       th:name="${_csrf.parameterName}"
+			       th:value="${_csrf.token}">
+
+            <input type="hidden" name="id" id="edit-id">
+
+            <label>タイトル</label><br>
+            <input type="text" name="title" id="edit-title" required><br><br>
+
+            <label>日付</label><br>
+            <input type="date" name="date" id="edit-date" required><br><br>
+
+            <label>時刻</label><br>
+            <input type="time" name="time" id="edit-time"><br><br>
+
+            <label>内容</label><br>
+            <textarea name="description" id="edit-description"></textarea><br><br>
+
+			<label>通知タイミング</label><br>
+			<select name="notifyBeforeMinutes" id="edit-notify">
+			    <option value="0">予定時刻</option>
+				<option value="1">1分前</option>
+			    <option value="5">5分前</option>
+			    <option value="10">10分前</option>
+			    <option value="30">30分前</option>
+			    <option value="60">1時間前</option>
+			</select>
+			<span></span>			
+            <button type="submit">更新</button>
+            <button type="button" onclick="closeEditModal()">キャンセル</button>
+        </form>
+		<form id="delete-form" method="post">
+		    <input type="hidden"
+		           th:name="${_csrf.parameterName}"
+		           th:value="${_csrf.token}">
+
+		    <button type="submit"
+		            style="color:red;">
+		        削除
+		    </button>
+		</form>
+
+    </div>
+</div>
+
+
+
+<script>
+function openCreateModal(el) {
+    const date = el.dataset.date;
+
+    document.getElementById("create-date").value = date;
+    document.getElementById("create-modal").style.display = "block";
+}
+
+function closeCreateModal() {
+    document.getElementById("create-modal").style.display = "none";
+}
+</script>
+
+<script>
+function openEditModal(el) {
+    document.getElementById("edit-id").value = el.dataset.id;
+    document.getElementById("edit-title").value = el.dataset.title;
+    document.getElementById("edit-date").value = el.dataset.date;
+    document.getElementById("edit-time").value = el.dataset.time || "";
+    document.getElementById("edit-description").value =
+        el.dataset.description || "";
+
+    document.getElementById("edit-form").action =
+        `/reminder/${el.dataset.id}/edit`;
+	
+	const deleteForm = document.getElementById("delete-form");
+	if (deleteForm) {
+    deleteForm.action = `/reminder/${el.dataset.id}/delete`;
+　　}
+
+
+    document.getElementById("edit-modal").style.display = "block";
+}
+
+function closeEditModal() {
+    document.getElementById("edit-modal").style.display = "none";
+}
+</script>
+<script th:inline="javascript">
+const layoutJson = /*[[${layoutJson}]]*/ '{}';
+const config = JSON.parse(layoutJson);
+
+const calendar = document.getElementById("calendar");
+if (calendar && config.calendar) {
+  calendar.style.width = (config.calendar.width ?? 800) + "px";
+  calendar.style.opacity = config.calendar.opacity ?? 1;
+}
+
+const root = document.documentElement;
+root.style.setProperty('--bg-color', config.backgroundColor ?? '#fff');
+root.style.setProperty('--text-color', config.textColor ?? '#000');
+root.style.setProperty('--font-size', config.fontSize ?? '16px');
+</script>
+
+
+
+
+</body>
+</html>
