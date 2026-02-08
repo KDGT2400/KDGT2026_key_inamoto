@@ -1,33 +1,30 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>レイアウトカスタマイズ</title>
-<link rel="stylesheet" href="/css/customize.css">
+  <meta charset="UTF-8">
+  <title>レイアウトカスタマイズ</title>
+  <link rel="stylesheet" href="/css/customize.css">
 </head>
 <body>
-
+<!--
 <h2>ドラッグで移動できます</h2>
 
 <div id="calendarPanel" class="panel">
   カレンダーエリア
-</div>
+</div>　-->
+
 <form th:action="@{/customize/save}" method="post">
   <input type="hidden"
          th:name="${_csrf.parameterName}"
          th:value="${_csrf.token}" />
 
-  <!-- JSON保存用 -->
   <input type="hidden" name="layoutJson" id="layoutJson">
 
-  <!-- 表示設定 -->
   <label>背景色</label><br>
-  <input type="color" name="backgroundColor"
-         th:value="${user.backgroundColor}"><br><br>
+  <input type="color" name="backgroundColor"><br><br>
 
   <label>文字色</label><br>
-  <input type="color" name="textColor"
-         th:value="${user.textColor}"><br><br>
+  <input type="color" name="textColor"><br><br>
 
   <label>文字サイズ</label><br>
   <select name="fontSize">
@@ -36,31 +33,92 @@
     <option value="16px">大</option>
   </select><br><br>
 
+  <label>テーマ</label><br>
+  <select name="theme" id="themeSelect">
+    <option value="light">ライト</option>
+    <option value="dark">ダーク</option>
+    <option value="blue">ブルー</option>
+  </select><br><br>
+  
+  <label>フォント</label><br>
+  <select name="fontFamily">
+    <option value="Meiryo">メイリオ</option>
+    <option value="'Hiragino Kaku Gothic ProN'">ヒラギノ角ゴ</option>
+    <option value="'Noto Sans JP', sans-serif">Noto Sans JP</option>
+    <option value="serif">明朝系</option>
+  </select><br><br>
+
+  
   <button type="submit">保存</button>
 </form>
 
-
-
-</script>
+<!-- Thymeleaf → JS に JSON を渡す -->
 <script th:inline="javascript">
   const savedLayout = /*[[${layoutJson}]]*/ "{}";
+  console.log("savedLayout =", savedLayout);
 </script>
 
-<script src="/js/drag.js"></script>
-</body>
-</html>
+<!--　<script src="/js/drag.js"></script>　-->
 
 <script th:inline="javascript">
-  const layout = JSON.parse(/*[[${layoutJson}]]*/ "{}");
+  const layout = JSON.parse(savedLayout);
+  console.log("layout =", layout);
+  
+  document.getElementById("themeSelect").value = layout.theme ?? "light";
+  document.querySelector('[name="fontFamily"]').value =
+    layout.fontFamily ?? "Meiryo";
 
-  const panel = document.getElementById("calendarPanel");
+  window.addEventListener('DOMContentLoaded', () => {
+    const bg = document.querySelector('[name="backgroundColor"]');
+    if (bg && layout.backgroundColor) bg.value = layout.backgroundColor;
 
-  if (layout.calendar) {
-    panel.style.left = layout.calendar.x + "px";
-    panel.style.top = layout.calendar.y + "px";
-    panel.style.width = layout.calendar.width + "px";
-    panel.style.height = layout.calendar.height + "px";
-    panel.style.opacity = layout.calendar.opacity;
-  }
+    const text = document.querySelector('[name="textColor"]');
+    if (text && layout.textColor) text.value = layout.textColor;
+
+    const size = document.querySelector('[name="fontSize"]');
+    if (size && layout.fontSize) size.value = layout.fontSize;
+  });
 </script>
 
+<script>
+  const THEMES = {
+    light: {
+      backgroundColor: "#ffffff",
+      textColor: "#000000"
+    },
+    dark: {
+      backgroundColor: "#111827",
+      textColor: "#e5e7eb"
+    },
+    blue: {
+      backgroundColor: "#eff6ff",
+      textColor: "#1e3a8a"
+    }
+  };
+</script>
+
+<script>
+  document.getElementById("themeSelect").addEventListener("change", e => {
+    const theme = THEMES[e.target.value];
+    if (!theme) return;
+
+    document.body.style.backgroundColor = theme.backgroundColor;
+    document.body.style.color = theme.textColor;
+
+    document.querySelector('[name="backgroundColor"]').value = theme.backgroundColor;
+    document.querySelector('[name="textColor"]').value = theme.textColor;
+  });
+</script>
+
+<script>
+  document.querySelector('[name="fontFamily"]').addEventListener("change", e => {
+    document.body.style.fontFamily = e.target.value;
+  });
+</script>
+
+<!--　<script src="/js/theme.js"></script>　-->
+
+
+
+</body>
+</html>

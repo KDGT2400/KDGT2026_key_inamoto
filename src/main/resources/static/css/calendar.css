@@ -1,9 +1,68 @@
 /* ===== 全体 ===== */
-body {
-    font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", sans-serif;
-    background: #f5f6f8;
-    color: #333;
+:root {
+  /* 基本色 */
+  --color-bg: #ffffff;
+  --color-text: #111827;
+  --color-muted: #6b7280;
+
+  /* メインカラー */
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+
+  /* 危険色 */
+  --color-danger: #ef4444;
+  --color-danger-hover: #dc2626;
+
+  /* サーフェス */
+  --color-surface: #ffffff;
+  --color-surface-alt: #f3f4f6;
+  --color-border: #e5e7eb;
+
+  /* フォント */
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Meiryo, sans-serif;
+  --font-size: 16px;
+
+  /* 角丸・影 */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.05);
 }
+
+body.theme-light {
+  --color-bg: #ffffff;
+  --color-text: #111827;
+  --color-surface: #ffffff;
+}
+
+body.theme-dark {
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-alt: #334155;
+  --color-text: #e5e7eb;
+  --color-border: #475569;
+
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+}
+
+body.theme-blue {
+  --color-bg: #eff6ff;
+  --color-text: #1e3a8a;
+  
+  --color-surface: #ffffff;
+  --color-surface-alt: #e0e7ff;
+  
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+}
+
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+}
+
 
 h1 {
     margin: 20px 0 10px;
@@ -22,15 +81,15 @@ a:hover {
 table {
     border-collapse: collapse;
     width: 100%;
-    background: #fff;
+	background: var(--color-surface);
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+	box-shadow: var(--shadow-sm);
 	table-layout: fixed;
 }
 
 th {
-    background: #f0f3f7;
+	background: var(--color-surface-alt);
     text-align: center;
     padding: 10px 0;
     font-weight: 600;
@@ -86,28 +145,72 @@ td:last-child .date {
     display: block;
     padding: 3px 6px;
     border-radius: 6px;
-    background: #eef2ff;
-    color: #3730a3;
+	background: var(--color-primary);
+	color: #fff;
 	white-space: nowrap;
 	overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .reminder-link:hover {
-    background: #c7d2fe;
+	background: var(--color-primary-hover);
 }
 
 /* ===== モーダル共通 ===== */
 #create-modal > div,
 #edit-modal > div {
-    border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+	width: 420px;
+	max-width: 90%;
+	max-height: 85vh;           
+	overflow-y: auto; 
+	  
+	background: var(--color-surface);
+	color: var(--color-text);
+
+	border-radius: 14px;
+	padding: 28px;
+	box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
+
+/* ===== モーダル背景 ===== */
+#create-modal,
+#edit-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55); /* ダークでも自然 */
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 
 #create-modal h2,
 #edit-modal h2 {
-    margin-top: 0;
+	font-size: 20px;
+	font-weight: 600;
+	margin-bottom: 20px;
+	color: var(--color-primary);
 }
+
+/* ===== フォーム ===== */
+#create-modal form,
+#edit-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+
 
 /* ===== フォーム ===== */
 input[type="text"],
@@ -115,12 +218,62 @@ input[type="date"],
 input[type="time"],
 textarea,
 select {
-    width: 100%;
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box;
+	padding: 10px 12px;
+	border-radius: 8px;
+	border: 1px solid var(--color-border);
+	background: var(--color-surface);
+	color: var(--color-text);
+	font-size: 14px;
 }
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.15);
+}
+
+#edit-modal textarea,
+#create-modal textarea {
+  min-height: 80px;
+}
+
+/* ===== ボタンエリア ===== */
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* 送信 */
+button[type="submit"] {
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 500;
+}
+
+button[type="submit"]:hover {
+  background: var(--color-primary-hover);
+}
+
+/* キャンセル */
+button[type="button"] {
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+}
+
+/* 削除 */
+#delete-form button {
+  background: var(--color-danger);
+  color: #fff;
+  margin-top: 6px;
+}
+
+#delete-form button:hover {
+  background: var(--color-danger-hover);
+}
+
 
 button {
     padding: 6px 12px;
@@ -152,5 +305,79 @@ button:hover {
 .today .date {
     font-weight: bold;
     color: #92400e;
+}
+
+#create-modal form,
+#edit-modal form {
+  gap: 10px;   
+}
+
+#create-modal label,
+#edit-modal label {
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.calendar-nav {
+  display: block;
+  justify-content: center;
+  gap: 12px;
+  margin: 12px 0 20px;
+}
+
+.calendar-nav a {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.calendar-nav a:hover {
+  background: var(--color-primary);
+  color: #fff;
+  text-decoration: none;
+}
+
+.calendar-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+.calendar-actions .action {
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.calendar-actions .action:hover {
+  background: var(--color-primary);
+  color: #fff;
+  text-decoration: none;
+}
+
+
+.calendar-actions .action.primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.calendar-actions .action.primary:hover {
+  background: var(--color-primary-hover);
+}
+
+
+@media (max-height: 700px) {
+  #create-modal > div,
+  #edit-modal > div {
+    padding: 20px;
+    max-height: 90vh;
+  }
 }
 

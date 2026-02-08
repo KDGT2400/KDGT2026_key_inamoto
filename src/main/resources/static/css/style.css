@@ -5,20 +5,87 @@
   padding: 0;
 }
 
+/* =========================
+   Design Tokens（共通）
+========================= */
+:root {
+  /* 基本色 */
+  --color-bg: #ffffff;
+  --color-text: #111827;
+  --color-muted: #6b7280;
+
+  /* メインカラー */
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+
+  /* 危険色 */
+  --color-danger: #ef4444;
+  --color-danger-hover: #dc2626;
+
+  /* サーフェス */
+  --color-surface: #ffffff;
+  --color-surface-alt: #f3f4f6;
+  --color-border: #e5e7eb;
+
+  /* フォント */
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Meiryo, sans-serif;
+  --font-size: 16px;
+
+  /* 角丸・影 */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+
 body {
-  font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
   font-size: var(--font-size);
 }
 
+
+body.theme-light {
+  --color-bg: #ffffff;
+  --color-text: #111827;
+  --color-surface: #ffffff;
+}
+
+body.theme-dark {
+  --color-bg: #111827;
+  --color-text: #e5e7eb;
+  --color-muted: #9ca3af;
+
+  --color-surface: #1f2933;
+  --color-surface-alt: #374151;
+  --color-border: #4b5563;
+  
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+}
+
+body.theme-blue {
+  --color-bg: #eff6ff;
+  --color-text: #1e3a8a;
+  
+  --color-surface: #ffffff;
+  --color-surface-alt: #e0e7ff;
+  
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+}
+
+
+
 /* ===== ヘッダー ===== */
 .header {
-  background-color: #4f46e5;
+  background-color: var(--color-primary);
   color: #fff;
   padding: 20px;
   text-align: center;
 }
+
 
 .header h1 {
   font-size: 24px;
@@ -37,23 +104,29 @@ body {
   justify-content: center;
   align-items: center;
   padding: 16px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #ddd;
+
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
 }
 
+
 .main-nav .button {
-  text-decoration: none;
-  padding: 8px 16px;
-  background-color: #4f46e5;
-  color: #fff;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: background-color 0.2s;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-md);
 }
 
 .main-nav .button:hover {
-  background-color: #4338ca;
+  background-color: var(--color-primary-hover);
 }
+
+.btn.delete {
+  background-color: var(--color-danger);
+}
+
+.btn.delete:hover {
+  background-color: var(--color-danger-hover);
+}
+
 
 .main-nav .button.secondary {
   background-color: #9ca3af;
@@ -78,28 +151,27 @@ body {
 .container h2 {
   margin-bottom: 12px;
   font-size: 20px;
-  border-left: 5px solid #4f46e5;
+  border-left: 5px solid var(--color-primary);
   padding-left: 10px;
 }
 
 /* ===== テーブル共通 ===== */
 table {
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff;
-  margin-bottom: 30px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
 thead {
-  background-color: #eef2ff;
+  background-color: var(--color-surface-alt);
 }
 
 th, td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-border);
 }
+
+
 
 th {
   font-size: 14px;
@@ -108,6 +180,13 @@ th {
 
 td {
   font-size: 14px;
+  padding: 14px 12px;
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+td:first-child {
+  font-weight: 500;
 }
 
 /* ===== リマインダー用 ===== */
@@ -174,6 +253,16 @@ td {
   margin: 0;
 }
 
+.button {
+  text-decoration: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+
 /* ボタン共通 */
 .btn {
   display: inline-block;
@@ -204,11 +293,11 @@ td {
   background-color: #dc2626;
 }
 
-/* ===== 過去のリマインダー ===== */
 .past-reminder {
-  background-color: #f3f4f6;   /* 薄いグレー */
-  color: #9ca3af;              /* 文字もグレー */
+  background-color: var(--color-surface-alt);
+  color: var(--color-muted);
 }
+
 
 /* ボタンも弱める 
 .past-reminder .btn {
@@ -239,6 +328,50 @@ td {
   border-radius: 6px;
   border: none;
   cursor: pointer;
+}
+
+
+/* テーブルを少し丸く */
+table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ヘッダーを強調 */
+thead th {
+  padding: 14px 12px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* 行 */
+tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+tbody tr:hover {
+  background-color: var(--color-surface-alt);
+}
+
+
+.status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* 未通知 */
+.status.pending {
+  background-color: rgba(59,130,246,0.15);
+  color: #2563eb;
+}
+
+/* 通知済み */
+.status.done {
+  background-color: rgba(16,185,129,0.15);
+  color: #047857;
 }
 
 

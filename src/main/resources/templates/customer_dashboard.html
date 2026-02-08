@@ -6,19 +6,6 @@
   <meta charset="UTF-8">
   <title>リマインダー一覧</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
-  <style>
-  :root {
-    --bg-color: [[${user.backgroundColor}]];
-    --text-color: [[${user.textColor}]];
-    --font-size: [[${user.fontSize}]];
-  }
-
-  body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-size: var(--font-size);
-  }
-  </style>
 </head>
 
 <body>
@@ -128,12 +115,23 @@
 </main>
 
 <script th:inline="javascript">
-    const layout = /*[[${layoutJson}]]*/ '{}';
-	const root = document.documentElement;
-	    root.style.setProperty('--bg-color', layout.backgroundColor ?? '#fff');
-	    root.style.setProperty('--text-color', layout.textColor ?? '#000');
-	    root.style.setProperty('--font-size', layout.fontSize ?? '16px');
+  const layout = JSON.parse(/*[[${layoutJson}]]*/ "{}");
+
+  const root = document.documentElement;
+  root.style.setProperty('--color-bg', layout.backgroundColor ?? '#ffffff');
+  root.style.setProperty('--color-text', layout.textColor ?? '#000000');
+  root.style.setProperty('--font-size', layout.fontSize ?? '16px');
+  root.style.setProperty('--font-family', layout.fontFamily ?? 'Meiryo');
 </script>
+
+<script th:inline="javascript">
+  const savedTheme = /*[[${theme}]]*/ "light";
+  document.body.classList.add("theme-" + savedTheme);
+</script>
+
+
+<!--<script src="/js/theme.js"></script>-->
+
 
 </body>
 </html>

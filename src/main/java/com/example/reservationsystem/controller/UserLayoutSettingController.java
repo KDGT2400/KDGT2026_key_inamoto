@@ -68,7 +68,9 @@ public class UserLayoutSettingController {
         @AuthenticationPrincipal UserDetails userDetails,
         @RequestParam String backgroundColor,
         @RequestParam String textColor,
-        @RequestParam String fontSize
+        @RequestParam String fontSize,
+        @RequestParam String theme,
+        @RequestParam String fontFamily
     ) throws Exception {
 
     	System.out.println("=== customize save ===");
@@ -94,12 +96,15 @@ public class UserLayoutSettingController {
             layoutMap = new java.util.HashMap<>();
         }
 
-        // 🔽 ここで「以前のJSONに追加」
+        //  以前のJSONに追加
+        layoutMap.put("theme", theme);
         layoutMap.put("backgroundColor", backgroundColor);
         layoutMap.put("textColor", textColor);
         layoutMap.put("fontSize", fontSize);
+        layoutMap.put("fontFamily", fontFamily);
 
         setting.setUser(user);
+        setting.setTheme(theme);
         setting.setLayoutJson(mapper.writeValueAsString(layoutMap));
 
         layoutSettingRepository.save(setting);

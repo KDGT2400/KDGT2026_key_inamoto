@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>リマインド登録</title>
-<link rel="stylesheet" th:href="@{/css/style.css}">
+<link rel="stylesheet" th:href="@{/css/form.css}">
 </head>
 <body>
 
@@ -46,6 +46,20 @@
 <p>
     <a th:href="@{/calendar}">カレンダーへ戻る</a>
 </p>
+
+<script th:inline="javascript">
+  const layout = JSON.parse(/*[[${layoutJson}]]*/ "{}");
+
+  const root = document.documentElement;
+  root.style.setProperty('--font-size', layout.fontSize ?? '16px');
+  root.style.setProperty('--font-family', layout.fontFamily ?? 'system-ui');
+</script>
+
+<script th:inline="javascript">
+  const savedTheme = /*[[${theme}]]*/ "light";
+  document.body.classList.add("theme-" + savedTheme);
+</script>
+
 
 </body>
 </html>

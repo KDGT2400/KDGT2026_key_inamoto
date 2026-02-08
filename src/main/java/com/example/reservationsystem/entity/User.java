@@ -63,4 +63,6 @@ private String fontSize = "14px";
 
 @Column(columnDefinition = "TEXT")
 private String layoutJson;
+
+
 }

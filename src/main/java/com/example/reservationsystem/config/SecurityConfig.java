@@ -36,6 +36,7 @@ http.authorizeHttpRequests(authorize -> authorize
 .requestMatchers("/admin/**").hasRole("ADMIN")
 // /staff 配下は STAFF か ADMIN
 .requestMatchers("/staff/**").hasAnyRole("STAFF", "ADMIN")
+.requestMatchers("/signup").permitAll()
 // それ以外は認証必須
 .anyRequest().authenticated()
 )

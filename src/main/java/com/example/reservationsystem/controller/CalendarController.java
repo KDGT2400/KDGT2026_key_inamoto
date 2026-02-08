@@ -27,8 +27,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.reservationsystem.entity.Reminder;
 import com.example.reservationsystem.entity.User;
+import com.example.reservationsystem.entity.UserLayoutSetting;
 import com.example.reservationsystem.repository.ReminderRepository;
+import com.example.reservationsystem.repository.UserLayoutSettingRepository;
 import com.example.reservationsystem.repository.UserRepository;
+
+
 
 @Controller
 @RequestMapping("/calendar")
@@ -36,11 +40,15 @@ public class CalendarController {
 
     private final ReminderRepository reminderRepository;
     private final UserRepository userRepository;
+    private final UserLayoutSettingRepository layoutSettingRepository;
+
 
     public CalendarController(ReminderRepository reminderRepository,
-                              UserRepository userRepository) {
+                              UserRepository userRepository,
+                              UserLayoutSettingRepository layoutSettingRepository) {
         this.reminderRepository = reminderRepository;
         this.userRepository = userRepository;
+        this.layoutSettingRepository = layoutSettingRepository;
     }
 
     @GetMapping
@@ -96,6 +104,21 @@ public class CalendarController {
                 .findByEmail(userDetails.getUsername())
                 .orElseThrow();
         
+        UserLayoutSetting setting =
+        	    layoutSettingRepository.findByUser(user).orElse(null);
+
+        	model.addAttribute(
+        	    "layoutJson",
+        	    setting != null ? setting.getLayoutJson() : "{}"
+        	);
+
+        	model.addAttribute(
+        	    "theme",
+        	    setting != null && setting.getTheme() != null
+        	        ? setting.getTheme()
+        	        : "light"
+        	);
+
         
         model.addAttribute("weeks", weeks);
         model.addAttribute("year", y);

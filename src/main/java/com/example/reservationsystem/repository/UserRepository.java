@@ -19,4 +19,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 Optional<User> findByEmail(String email);
 // ロール名でユーザ一覧を取得（STAFF 一覧のプルダウン等に使用）
 List<User> findByRole(String role);
+boolean existsByEmail(String email);
 }

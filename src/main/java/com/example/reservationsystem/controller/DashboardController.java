@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 // User エンティティ：現在ログイン中のユーザ情報を取得・判定に使用
 import com.example.reservationsystem.entity.User;
+import com.example.reservationsystem.entity.UserLayoutSetting;
 import com.example.reservationsystem.repository.ReminderRepository;
 // 予約検索のための JPA リポジトリ（ダッシュボード表示データ取得に使用）
 import com.example.reservationsystem.repository.ReservationRepository;
+import com.example.reservationsystem.repository.UserLayoutSettingRepository;
 // ユーザ検索のための JPA リポジトリ（メールで User を引く）
 import com.example.reservationsystem.repository.UserRepository;
+
 // このクラスが MVC コントローラであることを表明
 @Controller
 public class DashboardController {
@@ -29,18 +32,23 @@ private final UserRepository userRepository;
 // 予約情報へアクセスするためのリポジトリ（役割別に表示内容を切り替える）
 private final ReservationRepository reservationRepository;
 private final ReminderRepository reminderRepository;
+private final UserLayoutSettingRepository layoutSettingRepository;
 
 
 // 依存コンポーネント（リポジトリ）をコンストラクタで受け取り、DI する
 public DashboardController(UserRepository userRepository, 
 		                   ReservationRepository reservationRepository,
-		                   ReminderRepository reminderRepository) {
+		                   ReminderRepository reminderRepository,
+		                   UserLayoutSettingRepository layoutSettingRepository) {
 // フィールド userRepository に代入
 this.userRepository = userRepository;
 // フィールド reservationRepository に代入
 this.reservationRepository = reservationRepository;
 
 this.reminderRepository = reminderRepository;
+
+this.layoutSettingRepository = layoutSettingRepository;
+
 }
 
 //ダッシュボードのルート。ログイン後の遷移先
@@ -68,7 +76,21 @@ public String dashboard(
     LocalDate start = LocalDate.of(targetYear, targetMonth, 1);
     LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
     
-    
+    UserLayoutSetting setting =
+    	    layoutSettingRepository.findByUser(currentUser).orElse(null);
+
+    	model.addAttribute(
+    	    "layoutJson",
+    	    setting != null ? setting.getLayoutJson() : "{}"
+    	);
+
+    	model.addAttribute(
+    	        "theme",
+    	        setting != null && setting.getTheme() != null
+    	            ? setting.getTheme()
+    	            : "light"
+    	    );
+    	
 
     if (currentUser.getRole().equals("CUSTOMER")) {
 

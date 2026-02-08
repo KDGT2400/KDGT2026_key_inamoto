@@ -28,4 +28,7 @@ public class UserLayoutSetting {
     // レイアウト設定を JSON で保存
     @Column(columnDefinition = "TEXT")
     private String layoutJson;
+    
+    @Column(length = 20)
+    private String theme;
 }
